@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from catalogue.models import (CatalogueItem, BoardGameItem, BoardGameCommodity)
@@ -9,6 +8,7 @@ from django.conf import settings
 from dal import autocomplete
 # for case insensitive qureyset ordering
 from django.db.models.functions import Lower
+from warehouse.models import BoardGameContainer
 
 # Create your views here.
 class CatalogueItemListView(ListView):
@@ -23,8 +23,12 @@ class CatalogueItemListView(ListView):
     def get_queryset(self):
         self.queryset = BoardGameItem.objects.none()
         if self.request.method == 'GET':
-            filter_criteria = self.request.GET.get("filter")
-            if filter_criteria:
+            if self.request.GET.__contains__("filter"):
+                filter_criteria = self.request.GET.get("filter")
+                self.request.session ['catalogue_filter'] = filter_criteria
+            else:
+                filter_criteria = self.request.session.get ('catalogue_filter', None)
+            if filter_criteria != None:
                 commodities_ids = BoardGameCommodity.objects.filter(codeValue__icontains=filter_criteria).values_list('catalogueEntry')
                 games_by_barcode = BoardGameItem.objects.filter(id__in=commodities_ids)
                 games_by_title = BoardGameItem.objects.filter(itemLabel__icontains=filter_criteria)
@@ -33,22 +37,6 @@ class CatalogueItemListView(ListView):
             else:
                 self.queryset = BoardGameItem.objects.all().order_by("itemLabel")
             return self.queryset
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        req_copy = self.request.GET.copy()
-        req_copy.pop('page', True)
-        req_params = req_copy.urlencode()
-        context ['req_params'] = req_params
-        return context
-
-    # def get(self, request, *args, **kwargs):
-    #     # extract parameters from request and put them into context
-    #     req_copy = request.GET.copy()
-    #     self.request_parameters = req_copy.pop('page', True) and req_copy.urlencode()
-    #     return render(request, self.template_name)
-
 
 class BoardGameItemDetailsView(DetailView):
     model = BoardGameItem
@@ -145,3 +133,17 @@ class BoardGameCommodityUpdateView(LoginRequiredMixin, PermissionRequiredMixin, 
 
     form_class = BoardGameCommodityForm
     model = BoardGameCommodity
+
+# TODO add PermissionRequiredMixin
+class BoardGameCommodityNotInWarehouseAutocompleteViewByCode(autocomplete.Select2QuerySetView):
+    # these queryset data will be available through pulib url guard w/ permissions if necessary
+    # here are none as boardgame cataloge is going to be available for publicity
+    warehouse = None
+
+    def get_queryset(self):
+        if self.q:
+            qs = BoardGameCommodity.objects.filter(codeValue__icontains=self.q).order_by('codeValue')
+        else:
+            qs = BoardGameCommodity.objects.all().order_by('codeValue')
+
+        return qs

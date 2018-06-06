@@ -1,22 +1,8 @@
 @import url("/static/sharehold.css");
 
-.barcodefont{
-  font-family: 'Libre Barcode 39', cursive;
-  font-size: 2em;
-  color: black;
-}
-
-
-.barcodetextfont{
-  font-family: 'Libre Barcode 39 Text',cursive;
-  font-size: 3em;
-  text-align: center;
-  color: black;
-}
-
-.barcodefont{
-  font-size: 3em;
-  margin-bottom: 10px;
+.nav-catalogue {
+  color: var(--color2nd);
+  background-color: var(--color5th);
 }
 
 .cataloguelist, .bgeditons{
@@ -29,8 +15,9 @@
 .catalogentry{
   background-color: var(--color6th);
   padding: 8px;
+  margin-top: 8px;
   margin-right: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   flex-basis: 320px;
   min-width: 300px;
   max-width: 360px;

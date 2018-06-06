@@ -1,17 +1,25 @@
 {% extends "warehouse/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
 
-<div class="jumbotron">
-    <h1>Nowa gra planszowa</h1>
-</div>
-<div>
-    <form class="boardgame-form" method="post">
-        {% csrf_token %}
-        {{form.as_p}}
 
-        <button type="submit" class="save btn btn-primary">Dodaj</button>
+<div class="jumbotron content pl-3">
+    <h1>Nowy przedmiot katalogowy w magazynie</h1>
+    <form class="container-form" method="post">
+      {% include "sharehold/formfieldsgenerator.html" %}
+
+      <!-- {% if perms.catalogue.add_commodity %} -->
+      <button type="submit" class="save btn btn-primary btn-warning">Dodaj do magazynu</button>
+      <!-- {% endif %} -->
+      <!-- docelowo powrót do magazynu, z którego przyszliśmy -->
+      <a href="{% url 'warehouse_index' %}" class="btn btn-default">Anuluj</a>
     </form>
 </div>
+
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{{ form.media }}
 
 {% endblock %}

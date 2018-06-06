@@ -1,11 +1,17 @@
 @import url("/static/pagination.css");
 
 :root {
+    /* szary */
     --color1st: rgba(183, 183, 183, 1);
+    /* granat */
     --color2nd: rgba(23, 55, 83, 1);
+    /* zielen */
     --color3rd: rgba(186, 216, 60, 1);
+    /* pomarancz */
     --color4th: rgba(255, 136, 17, 1);
+    /* zolty */
     --color5th: rgba(254, 208, 0, 1);
+    /* jasno szary */
     --color6th: rgba(248, 248, 248, 1);
 }
 
@@ -13,27 +19,46 @@ body {
   background-color: white;
 }
 
+h2 {
+  padding-top: 16px;
+}
+
+i {
+  vertical-align: middle;
+}
+
 .topnavbar {
   background-color: var(--color2nd);
   min-height: 2em;
+  padding: 8px 0px 16px 0px;
+  /* line-height: 36px; */
+}
+
+.navbar-item {
+  background-color: var(--color2nd);
+  color: white;
+  font-size: 1.5em;
+  padding-right: 0.5em;
+}
+
+.navbar-label {
+  color: white;
+  font-size: 1.5em;
+  padding-right: 0.5em;  
 }
 
 .topnav-la {
-  background-color: var(--color2nd);
-  color: white;
-  font-size: 1.5em;
-  /* padding-left: 3px; */
+  /* justify-content: flex-start; */
+  padding-left: 3px;
 }
 
 .topnav-ra {
-  background-color: var(--color2nd);
-  color: white;
-  font-size: 1.5em;
+  padding-right: 3px;
 }
 
-.topnav-la:hover, .topnav-ra:hover {
+.navbar-item:hover {
   color: var(--color2nd);
-  background-color: var(--color4th);
+  background-color: var(--color5th);
 }
 
 .sidemenu {
@@ -62,10 +87,6 @@ body {
   font-family: 'Russo One', sans-serif;
 }
 
-i {
-  vertical-align: middle;
-}
-
 .mainmenu {
   background-color: var(--color2nd);
   color: white;
@@ -79,7 +100,7 @@ i {
 
 .mainmenu:hover {
   color: var(--color2nd);
-  background-color: var(--color4th);
+  background-color: var(--color5th);
 }
 
 .appmenu {
@@ -94,7 +115,7 @@ i {
 
 .appmenu:hover {
   color: var(--color2nd);
-  background-color: var(--color4th);
+  background-color: var(--color5th);
 }
 
 .canvas {
@@ -110,17 +131,26 @@ i {
   margin: 0px 0px 0px 16px;
 }
 
+
 .btn-primary {
   background-color: var(--color3rd);
   border-color: var(--color3rd);
   color: var(--color2nd);
+  font-weight: bold;
+  margin: 3px;
+}
+
+.btn-secondary {
+  background-color: var(--color2nd);
+  border-color: var(--color2nd);
+  color: white;
   margin: 3px;
 }
 
 .btn-warning {
   background-color: var(--color4th);
   border-color: var(--color4th);
-  color: var(--color2nd);
+  color: white;
   margin: 3px;
 }
 
@@ -128,8 +158,34 @@ i {
   color: var(--color2nd);
 }
 
-.btn:hover {
-  background-color: var(--color2nd);
-  border-color: var(--color2nd);
+.btn.disabled {
+  background-color: var(--color1st);
+  border-color: var(--color1st);
   color: white;
+}
+
+.btn:hover {
+  color: var(--color2nd);
+  background-color: var(--color5th);
+  border-color: var(--color5th);
+}
+
+
+.barcodefont{
+  font-family: 'Libre Barcode 39', cursive;
+  font-size: 2em;
+  color: black;
+}
+
+
+.barcodetextfont{
+  font-family: 'Libre Barcode 39 Text',cursive;
+  font-size: 3em;
+  text-align: center;
+  color: black;
+}
+
+.barcodefont{
+  font-size: 3em;
+  margin-bottom: 10px;
 }

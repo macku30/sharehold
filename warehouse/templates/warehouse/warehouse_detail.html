@@ -1,26 +1,83 @@
 {% extends "warehouse/base.html" %}
+{% load staticfiles %}
+{% load pagination %}
 
 {% block content %}
 
-<div class="jumbotron">
-    <h1>{{warehouse.name}}</h1>
-    <p>{{warehouse.desc}}</p>
+<div class="jumbotron content pl-3">
+  <h1>Przemioty w magazynie {{warehouse.name}}</h1>
+
+  <form class="warehouse_search_form" action="{% url 'warehouse_inventory' pk=warehouse.pk %}" method="GET">
+    <label for="filter_criteria">Ograniczenie listy</label>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <button type="submit" class="save btn btn-primary btn-lg mt-0 mb-0">Szukaj w magazynie</button>
+      </div>
+      <input type="text" class="form-control" id="filter_criteria" name="filter"
+        placeholder="Podaj kryteria wyszukiwania w magazynie" value={{ request.session.warehouse_filter }}>
+    </div>
+  </form>
+
+
+  <div class="container-fluid inventorylist">
+    <div class="row no-gutters">
+      <h2 class="w-100">Lista magazynowa:</h2>
+
+      {% if perms.warehouse.add_boardgamecontainer %}
+        <a class="btn btn-warning" href="{% url 'container_create' pk=warehouse.pk %}">Dodaj przedmiot katalogowy</a>
+      {% endif %}
+    </div>
+
+    <div class="row no-gutters">
+      {% regroup object_list.all by commodity.catalogueEntry as invitems_list %}
+      {% for invitem in invitems_list %}
+        <div class="d-flex flex-wrap col-lg-4 col-sm-6 containerentry">
+          <h4 class="w-100">{{ invitem.grouper.itemLabel }}</h4>
+          {% for container in invitem.list %}
+          {% with commodity=container.commodity %}
+            <p>{{ commodity.desc|default:"Brak dodatkowych informacji o wydaniu." }}</p>
+            <div class="row no-gutters">
+              <div class="col col-4">
+                {% if commodity.getImage %}
+                  <a href="{% url 'boardgame_edition_edit' pk=container.commodity.pk %}"><img class="img-responsive img-thumbnail" src="{{container.commodity.getImage.url}}"></a>
+                {% else %}
+                  <a href="{% url 'boardgame_edition_edit' pk=container.commodity.pk %}"><img class="img-responsive img-thumbnail" src="{% static 'noimage.png' %}"></a>
+                {% endif %}
+              </div>
+              <div class="col col-8">
+                <h5>Przypisanych do magazynu:</h5>
+                <div class="row no-gutters justify-content-around">
+                  {% if perms.warehouse.change_boardgamecontainer %}
+                    <a class="btn btn-warning inventorybtn" href="{% url 'bgcontainer_dec' cntpk=container.pk %}">
+                      <i class="material-icons md-36">remove_circle_outline</i></a>
+                  {% endif %}
+                  <p class="inventoryvolume">{{container.total}}</p>
+                  {% if perms.warehouse.change_boardgamecontainer %}
+                    <a class="btn btn-warning inventorybtn" href="{% url 'bgcontainer_inc' cntpk=container.pk %}">
+                      <i class="material-icons md-36">add_circle_outline</i></a>
+                  {% endif %}
+                </div>
+              </div>
+              <h5>Dostępnych w magazynie: <span class="availablevolume">{{ container.available }}</span></h5>
+                <p class="barcodetextfont w-100">{{ commodity.codeValue }}</p>
+            </div>
+          {% endwith %}
+          {% empty %}
+            <p>Brak egzemplarzy przedmiotu przypisanych do magazynu.</p>
+          {% endfor %}
+        </div>
+      {% empty %}
+        <p>Brak przedmiotów przypisanych do magazynu.</p>
+      {% endfor %}
+    </div>
+  </div>
 </div>
-<div>
-    <h2>Gry w magazynie</h2>
-    <table>
-        <thead>
-        <td>tytuł</td>
-        <td>dostępna ilość</td>
-        </thead>
-        {% for container in warehouse.boardgamecontainer_set.all %}
-        <tr>
-            <td>{{ container.commodity }}</td>
-            <td>{{ container.available }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <a href="{% url 'container_create' pk=warehouse.pk %}">dodaj grę</a>
-</div>
+
+{% if is_paginated %}
+  <div class="container">
+    {% paginator 5%}
+  </div>
+{% endif %}
+
 
 {% endblock %}

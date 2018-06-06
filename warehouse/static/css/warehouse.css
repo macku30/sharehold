@@ -1,0 +1,77 @@
+@import url("/static/sharehold.css");
+
+.nav-warehouse {
+  color: var(--color2nd);
+  background-color: var(--color5th);
+}
+
+.warehouse {
+  background-color: var(--color6th);
+  padding: 8px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  flex-basis: 450px;
+  min-width: 400px;
+  max-width: 500px;
+  min-height: 150px;
+  flex-grow: 1;
+  flex-shrink: 2;
+}
+
+.inventorylist{
+  margin-left: 0px;
+  margin-right: 0px;
+  padding: 0px 0px;
+  background-color: white;
+}
+
+.inventoryitem{
+  padding: 0px 0px;
+  margin-right: 8px;
+}
+
+.inventorybtn {
+  height: 5em;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.inventorybtn i {
+}
+
+.inventoryvolume {
+  font-size: 5em;
+}
+
+.availablevolume {
+  font-size: 3em;
+}
+
+
+.commoditylist{
+  /* max-width: 100%; */
+}
+
+.containerentry{
+  background-color: var(--color6th);
+  padding: 8px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  flex-basis: 450px;
+  min-width: 400px;
+  max-width: 500px;
+  min-height: 150px;
+  flex-grow: 1;
+  flex-shrink: 2;
+}
+
+.containerentry .row {
+  margin: 0px;
+}
+
+.containerentry img {
+  max-width: 150px;
+  max-height: 150px;
+  flex-grow: 1;
+  flex-shrink: 2;
+}
